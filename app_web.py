@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import streamlit as st 
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,6 +11,12 @@ from langchain_core.runnables import RunnablePassthrough
 
 from my_models import GEMINI_FLASH
 from detalles_image import DetallesImagen
+
+# CARGAR LAS VARIABLES DEL ARCHIVO .ENV
+load_dotenv()
+
+#LEER LA API KEY DESDE EL ENTORNO
+gcp_api_key = os.getenv("GCP_API_KEY")
 
 # CONFIGURACION DE LA PAGINA STREAMLIT
 st.set_page_config(
