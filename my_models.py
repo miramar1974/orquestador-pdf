@@ -1,1 +1,1 @@
-GEMINI_FLASH = "gemini-1.5-flash"
+GEMINI_FLASH = "gemini-2.5-flash" 
