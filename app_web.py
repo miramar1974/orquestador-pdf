@@ -145,31 +145,31 @@ if pregunta := st.chat_input("Escribe tu pregunta aquí y presiona Enter..."):
         st.markdown(pregunta)
     st.session_state.mensajes_ui.append({"role": "user", "content": pregunta})
     
-#Generar la respuesta medica institucional
+    #Generar la respuesta medica institucional
 
-with st.chat_message("assistant"):
-    with st.spinner("Consultando la informacion interna de SaludPlus..."):
+    with st.chat_message("assistant"): # <-- Lo metimos dentro del if para evitar el error al realizar la pregunta
+        with st.spinner("Consultando la informacion interna de SaludPlus..."):
         
-        try:
-             #Invocar la cadena pasando el historial dinamico acumulado y la nueva pregunta
-            respuesta_ai = cadena_atencion.invoke({
-                "historial": st.session_state.historial_langchain,
-                "pregunta_paciente": pregunta
-           })
+            try:
+                #Invocar la cadena pasando el historial dinamico acumulado y la nueva pregunta
+                respuesta_ai = cadena_atencion.invoke({
+                    "historial": st.session_state.historial_langchain,
+                    "pregunta_paciente": pregunta
+                })
    
-            #Desplegar la respuesta en la pantalla
-            st.markdown(respuesta_ai)
+                #Desplegar la respuesta en la pantalla
+                st.markdown(respuesta_ai)
         
-            #Actualizar la UI
-            st.session_state.mensajes_ui.append({"role": "assistant", "content": respuesta_ai})
+                #Actualizar la UI
+                st.session_state.mensajes_ui.append({"role": "assistant", "content": respuesta_ai})
         
-            #Actualizar la memoria con el formato de tuplas nativo("user"/"assistant")compatible con pydantic v2
+                #Actualizar la memoria con el formato de tuplas nativo("user"/"assistant")compatible con pydantic v2
         
-            st.session_state.historial_langchain.append(("user",pregunta)) # <-- Aqui quitamos HumanMessage(content=pregunta)
-            st.session_state.historial_langchain.append(("assistant", respuesta_ai)) # <-- Aqui quitamos (AIMessage(content=respuesta_ai))
+                st.session_state.historial_langchain.append(("user",pregunta)) # <-- Aqui quitamos HumanMessage(content=pregunta)
+                st.session_state.historial_langchain.append(("assistant", respuesta_ai)) # <-- Aqui quitamos (AIMessage(content=respuesta_ai))
         
-        except Exception as e:
-            st.error(f"Tuvimos un problema al conectar con el sistea de atencion: {e}")
+            except Exception as e:
+                st.error(f"Tuvimos un problema al conectar con el sistea de atencion: {e}")
                                             
 # NUEVA ESTRUCTURA DE TEXTO
 #class Reportedocumento(BaseModel):
