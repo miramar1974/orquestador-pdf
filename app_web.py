@@ -104,21 +104,37 @@ template_hospital = ChatPromptTemplate.from_messages([
 #Cadena LCEL limpia que procesa la entrada y devuelve texto directo
 cadena_atencion = template_hospital | llm | StrOutputParser()
  
- # 4.1 MENU DE LA BARRA LATERAL (BOTON REINICIAR CHAT)
+  # 4.1 MENU DE LA BARRA LATERAL (CENTRADOS TODOS LOS ELEMENTOS CON COLUMNAS)
 with st.sidebar:
-     st.image("https://flaticon.com", width=100) # <-- Icono institucional decorativo
-     st.header("Opciones de Sesion")
-     st.write("Si deseas borrar la conversacion actual para iniciar una nueva consulta, presiona el siguiente boton:")
      
-     # Boton que limpia la memoria de forma inmediata
+     # 1. Definimos la ruta de la imagen en la misma carpeta del script
+     RUTA_LOGO = os.path.join(os.path.dirname(__file__), "logo_saludplus.jpg")
+     
+     # 2. Verificamos si el archivo existe físicamente antes de cargarlo
+     if os.path.exists(RUTA_LOGO):
+         # Creamos 3 columnas en la barra lateral para forzar el centrado exacto
+         # La columna del centro (proporción 3) recibe la imagen, las de los lados (proporción 1) hacen espacio
+         col1, col2, col3 = st.columns([1, 3, 1])
+         with col2:
+             st.image(RUTA_LOGO, use_container_width=True) # Ajusta la imagen al ancho de la columna central
+     else:
+         # Texto centrado si la imagen no se encuentra
+         st.markdown("<h3 style='text-align: center;'>🏥 SaludPlus</h3>", unsafe_allow_html=True)
+         
+     # 3. Títulos y textos de la sesión completamente centrados usando HTML estándar
+     st.markdown("<h2 style='text-align: center; font-size: 1.5rem;'>Opciones de Sesión</h2>", unsafe_allow_html=True)
+     st.markdown("<p style='text-align: center; font-size: 0.9rem;'>Si deseas borrar la conversación actual para iniciar una nueva consulta, presiona el siguiente botón:</p>", unsafe_allow_html=True)
+     st.write("") # Pequeño espacio de separación visual antes del botón
+     
+     # 4. Botón que ocupa todo el ancho disponible (alineado perfectamente con el contenido superior)
      if st.button("Reiniciar Chat", use_container_width=True):
          if "mensajes_ui" in st.session_state: 
              del st.session_state.mensajes_ui
          if "historial_langchain" in st.session_state: 
              del st.session_state.historial_langchain
-         st.success("¡Chat reiniciado con exito!")
+         st.success("¡Chat reiniciado con éxito!")
          st.rerun()
-         
+        
  
  #5. ADMINISTRACION DEL HISTORIAL DE CHAT EN STREAMLIT
 if "mensajes_ui" not in st.session_state:
