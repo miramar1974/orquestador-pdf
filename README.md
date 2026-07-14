@@ -158,7 +158,7 @@ Puedes probar el asistente con preguntas como las siguientes:
 
 | Interfaz Principal | Consulta con Contexto | Respuesta del Sistema |
 | :---: | :---: | :---: |
-| ![Interfaz Principal](assets/screenshot_principal.png) | ![Consulta con Contexto](assets/screenshot_contexto.png) | ![Respuesta del Sistema](assets/screenshot_respuesta.png) |
+| ![Interfaz Principal](assets/screenshot_principal.jpg) | ![Consulta con Contexto](assets/screenshot_contexto.jpg) | ![Respuesta del Sistema](assets/screenshot_respuesta.jpg) |
 
 ---
 
