@@ -1,1 +1,307 @@
-# Cl’nica Integral SaludPlus ??Este proyecto implementa un sistema **RAG (Retrieval-Augmented Generation)** que responde preguntas utilizando exclusivamente la documentaci—n interna (Manual de Operaciones, Pol’ticas y Gu’as integrales) de la empresa ficticia **Cl’nica Integral SaludPlus**.El aplicativo resuelve consultas sobre: pol’ticas de privacidad, derechos ARCO, consultas y turnos, entrega de resultados, pol’ticas de cancelaci—n, devoluciones, convenios, alertas de seguridad, directorio de sedes regionales, cat‡logo de medicamentos exclusivos, costos de servicios, horarios, facturaci—n electr—nica, traslados en ambulancia, descuentos especiales y gu’a de admisi—n.---## ?? ObjetivoDesarrollar e implementar un asistente virtual capaz de:* **Consultar** documentaci—n interna estructurada en formato PDF.* **Analizar** el documento de forma sem‡ntica para extraer la respuesta correcta.* **Generar** respuestas fundamentadas estrictamente en dicho documento.* **Evitar** alucinaciones o respuestas inventadas si la informaci—n no existe en el archivo.---## ?? Estado del Proyecto* **Estado:** Finalizado, desplegado y en producci—n. ??---## ? Caracter’sticas* **Lectura de PDFs:** Procesa el Manual de Operaciones, Pol’ticas y Gu’as Integrales.* **Generaci—n Avanzada:** Respuestas potenciadas por los modelos de Google Gemini.* **Restricci—n de Contexto:** Respuestas basadas *œnicamente* en la informaci—n del PDF.* **Interfaz de Usuario:** Entorno web amigable desarrollado con Streamlit.---## ??? Arquitectura y FlujoEl sistema se basa en una arquitectura RAG est‡ndar. Si la pregunta del usuario no encuentra coincidencia en el PDF, el sistema lo detecta y le invita a reformular su consulta.```mermaidgraph TD    A[Inicio] --> B(Usuario)    B --> C(Interfaz Streamlit)    C --> D(Retriever)    D --> E{ÀInformaci—n en el PDF?}    E -- No --> F[Invitaci—n a reformular]    F --> C    E -- S’ --> G[Google Gemini]    G --> H[Respuesta en Pantalla]    H --> I[Fin]```---## ??? Tecnolog’as Utilizadas* **Lenguaje:** Python 3.14.6* **Frontend:** Streamlit* **Orquestaci—n LLM:** LangChain* **Modelo Inteligencia Artificial:** Google Gemini* **Gesti—n de Entorno:** Python-dotenv---## ?? Instalaci—nSigue estos pasos para configurar el proyecto en tu entorno local:1. **Clonar el repositorio:**   ```bash   git clone https://github.com   ```2. **Ingresar al directorio del proyecto:**   ```bash   cd orquestador-pdf   ```3. **Crear un entorno virtual:**   ```bash   python -m venv .venv   ```4. **Activar el entorno virtual:**   * En Windows:     ```bash     .venv\Scripts\activate     ```   * En Linux/macOS:     ```bash     source .venv/bin/activate     ```5. **Instalar las dependencias:**   ```bash   pip install -r requirements.txt   ```6. **Configurar las variables de entorno:**   Crea un archivo llamado `.env` en la ra’z del proyecto y agrega tu clave de API de Gemini:   ```env   GEMINI_API_KEY=tu_clave_api_key_aqu’   ```---## ?? ExecutionUna vez instaladas las dependencias y configurada tu API Key, inicializa la aplicaci—n con el siguiente comando:```bashstreamlit run app_web.py```Inmediatamente se abrir‡ tu explorador web con la interfaz gr‡fica para comenzar a interactuar.---## ?? Ejemplos de ConsultasPuedes probar el sistema realizando preguntas como:* ÀCosto de consultas?* ÀReembolsos?* ÀAgendar consultas?* ÀTraslados en ambulancia?* ÀPol’tica de privacidad del paciente?* ÀEntrega de resultados?* ÀPol’tica de cancelaciones?* ÀDevoluciones?* ÀGu’a de convenios?* ÀSedes alternas?* ÀCosto de imagenolog’a avanzada?* ÀFacturaci—n electr—nica?* ÀPol’tica de descuentos?* ÀGu’a de admisi—n?* ÀProtocolos de alta mdica?---## ?? Capturas de Pantalla### 1. Interfaz PrincipalAl iniciar la aplicaci—n, el usuario es recibido por un entorno limpio en Streamlit que invita a realizar consultas sobre los servicios mdicos de la cl’nica.<img src="assets/screenshot_principal.jpg" alt="Interfaz de Inicio SaludPlus" width="70%">### 2. Respuestas Basadas en el Contexto (RAG Activo)Cuando el usuario realiza una pregunta v‡lida (como consultar sobre los Derechos ARCO), el sistema extrae la informaci—n del documento PDF y genera una respuesta precisa y estructurada en vi–etas.<img src="assets/screenshot_respuesta.jpg" alt="Consulta V‡lida" width="70%">### 3. Control de Contexto y Seguridad (Filtro Anti-Alucinaci—n)Si el usuario intenta hacer una consulta ajena a la cl’nica (por ejemplo, sobre el mundial de fœtbol), el modelo restringe la respuesta de forma segura y le recuerda al usuario interactuar œnicamente con base en la documentaci—n institucional.<img src="assets/screenshot_contexto.jpg" alt="Manejo Fuera de Contexto" width="70%">---## ?? Autor* **Miguel Ibarra Miramar** - [GitHub](https://github.com)
+# Clï¿½nica Integral SaludPlus ??
+
+Este proyecto implementa un sistema **RAG (Retrieval-Augmented Generation)** que responde preguntas utilizando exclusivamente la documentaciï¿½n interna (Manual de Operaciones, Polï¿½ticas y Guï¿½as integrales) de la empresa ficticia **Clï¿½nica Integral SaludPlus**.
+
+El aplicativo resuelve consultas sobre: polï¿½ticas de privacidad, derechos ARCO, consultas y turnos, entrega de resultados, polï¿½ticas de cancelaciï¿½n, devoluciones, convenios, alertas de seguridad, directorio de sedes regionales, catï¿½logo de medicamentos exclusivos, costos de servicios, horarios, facturaciï¿½n electrï¿½nica, traslados en ambulancia, descuentos especiales y guï¿½a de admisiï¿½n.
+
+---
+
+## ?? Objetivo
+
+Desarrollar e implementar un asistente virtual capaz de:
+* **Consultar** documentaciï¿½n interna estructurada en formato PDF.
+* **Analizar** el documento de forma semï¿½ntica para extraer la respuesta correcta.
+* **Generar** respuestas fundamentadas estrictamente en dicho documento.
+* **Evitar** alucinaciones o respuestas inventadas si la informaciï¿½n no existe en el archivo.
+
+---
+
+## ?? Estado del Proyecto
+
+* **Estado:** Finalizado, desplegado y en producciï¿½n. ??
+
+---
+
+## ? Caracterï¿½sticas
+
+* **Lectura de PDFs:** Procesa el Manual de Operaciones, Polï¿½ticas y Guï¿½as Integrales.
+* **Generaciï¿½n Avanzada:** Respuestas potenciadas por los modelos de Google Gemini.
+* **Restricciï¿½n de Contexto:** Respuestas basadas *ï¿½nicamente* en la informaciï¿½n del PDF.
+* **Interfaz de Usuario:** Entorno web amigable desarrollado con Streamlit.
+
+---
+
+## ??? Arquitectura y Flujo
+
+El sistema se basa en una arquitectura RAG estï¿½ndar. Si la pregunta del usuario no encuentra coincidencia en el PDF, el sistema lo detecta y le invita a reformular su consulta.
+
+```mermaid
+graph TD
+    A[Inicio] --> B(Usuario)
+    B --> C(Interfaz Streamlit)
+    C --> D(Retriever)
+    D --> E{ï¿½Informaciï¿½n en el PDF?}
+    E -- No --> F[Invitaciï¿½n a reformular]
+    F --> C
+    E -- Sï¿½ --> G[Google Gemini]
+    G --> H[Respuesta en Pantalla]
+    H --> I[Fin]
+```
+
+---
+
+## ??? Tecnologï¿½as Utilizadas
+
+* **Lenguaje:** Python 3.14.6
+* **Frontend:** Streamlit
+* **Orquestaciï¿½n LLM:** LangChain
+* **Modelo Inteligencia Artificial:** Google Gemini
+* **Gestiï¿½n de Entorno:** Python-dotenv
+
+---
+
+## ?? Instalaciï¿½n
+
+Sigue estos pasos para configurar el proyecto en tu entorno local:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com
+   ```
+
+2. **Ingresar al directorio del proyecto:**
+   ```bash
+   cd orquestador-pdf
+   ```
+
+3. **Crear un entorno virtual:**
+   ```bash
+   python -m venv .venv
+   ```
+
+4. **Activar el entorno virtual:**
+   * En Windows:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   * En Linux/macOS:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+5. **Instalar las dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. **Configurar las variables de entorno:**
+   Crea un archivo llamado `.env` en la raï¿½z del proyecto y agrega tu clave de API de Gemini:
+   ```env
+   GEMINI_API_KEY=tu_clave_api_key_aquï¿½
+   ```
+
+---
+
+## ?? Execution
+
+Una vez instaladas las dependencias y configurada tu API Key, inicializa la aplicaciï¿½n con el siguiente comando:
+
+```bash
+streamlit run app_web.py
+```
+
+Inmediatamente se abrirï¿½ tu explorador web con la interfaz grï¿½fica para comenzar a interactuar.
+
+---
+
+## ?? Ejemplos de Consultas
+
+Puedes probar el sistema realizando preguntas como:
+* ï¿½Costo de consultas?
+* ï¿½Reembolsos?
+* ï¿½Agendar consultas?
+* ï¿½Traslados en ambulancia?
+* ï¿½Polï¿½tica de privacidad del paciente?
+* ï¿½Entrega de resultados?
+* ï¿½Polï¿½tica de cancelaciones?
+* ï¿½Devoluciones?
+* ï¿½Guï¿½a de convenios?
+* ï¿½Sedes alternas?
+* ï¿½Costo de imagenologï¿½a avanzada?
+* ï¿½Facturaciï¿½n electrï¿½nica?
+* ï¿½Polï¿½tica de descuentos?
+* ï¿½Guï¿½a de admisiï¿½n?
+* ï¿½Protocolos de alta mï¿½dica?
+
+---
+
+## ?? Capturas de Pantalla
+
+### 1. Interfaz Principal
+Al iniciar la aplicaciï¿½n, el usuario es recibido por un entorno limpio en Streamlit que invita a realizar consultas sobre los servicios mï¿½dicos de la clï¿½nica.
+
+<img src="assets/screenshot_principal.jpg" alt="Interfaz de Inicio SaludPlus" width="70%">
+
+### 2. Respuestas Basadas en el Contexto (RAG Activo)
+Cuando el usuario realiza una pregunta vï¿½lida (como consultar sobre los Derechos ARCO), el sistema extrae la informaciï¿½n del documento PDF y genera una respuesta precisa y estructurada en viï¿½etas.
+
+<img src="assets/screenshot_respuesta.jpg" alt="Consulta Vï¿½lida" width="70%">
+
+### 3. Control de Contexto y Seguridad (Filtro Anti-Alucinaciï¿½n)
+Si el usuario intenta hacer una consulta ajena a la clï¿½nica (por ejemplo, sobre el mundial de fï¿½tbol), el modelo restringe la respuesta de forma segura y le recuerda al usuario interactuar ï¿½nicamente con base en la documentaciï¿½n institucional.
+
+<img src="assets/screenshot_contexto.jpg" alt="Manejo Fuera de Contexto" width="70%">
+
+---
+
+## ?? Autor
+
+* **Miguel Ibarra Miramar** - [GitHub](https://github.com)
+
+# ClÃ­nica Integral SaludPlus ğŸ¥
+
+Este proyecto implementa un sistema **RAG (Retrieval-Augmented Generation)** que responde preguntas utilizando exclusivamente la documentaciÃ³n interna (Manual de Operaciones, PolÃ­ticas y GuÃ­as integrales) de la empresa ficticia **ClÃ­nica Integral SaludPlus**.
+
+El aplicativo resuelve consultas sobre: polÃ­ticas de privacidad, derechos ARCO, consultas y turnos, entrega de resultados, polÃ­ticas de cancelaciÃ³n, devoluciones, convenios, alertas de seguridad, directorio de sedes regionales, catÃ¡logo de medicamentos exclusivos, costos de servicios, horarios, facturaciÃ³n electrÃ³nica, traslados en ambulancia, descuentos especiales y guÃ­a de admisiÃ³n.
+
+---
+
+## ğŸ¯ Objetivo
+
+Desarrollar e implementar un asistente virtual capaz de:
+* **Consultar** documentaciÃ³n interna estructurada en formato PDF.
+* **Analizar** el documento de forma semÃ¡ntica para extraer la respuesta correcta.
+* **Generar** respuestas fundamentadas estrictamente en dicho documento.
+* **Evitar** alucinaciones o respuestas inventadas si la informaciÃ³n no existe en el archivo.
+
+---
+
+## ğŸ“ˆ Estado del Proyecto
+
+* **Estado:** Finalizado, desplegado y en producciÃ³n. ğŸš€
+
+---
+
+## âš¡ CaracterÃ­sticas
+
+* **Lectura de PDFs:** Procesa el Manual de Operaciones, PolÃ­ticas y GuÃ­as Integrales.
+* **GeneraciÃ³n Avanzada:** Respuestas potenciadas por los modelos de Google Gemini.
+* **RestricciÃ³n de Contexto:** Respuestas basadas *Ãºnicamente* en la informaciÃ³n del PDF.
+* **Interfaz de Usuario:** Entorno web amigable desarrollado con Streamlit.
+
+---
+
+## ğŸ—ï¸ Arquitectura y Flujo
+
+El sistema se basa en una arquitectura RAG estÃ¡ndar. Si la pregunta del usuario no encuentra coincidencia en el PDF, el sistema lo detecta y le invita a reformular su consulta.
+
+```mermaid
+graph TD
+    A[Inicio] --> B(Usuario)
+    B --> C(Interfaz Streamlit)
+    C --> D(Retriever)
+    D --> E{Â¿InformaciÃ³n en el PDF?}
+    E -- No --> F[InvitaciÃ³n a reformular]
+    F --> C
+    E -- SÃ­ --> G[Google Gemini]
+    G --> H[Respuesta en Pantalla]
+    H --> I[Fin]
+```
+
+---
+
+## ğŸ› ï¸ TecnologÃ­as Utilizadas
+
+* **Lenguaje:** Python 3.14.6
+* **Frontend:** Streamlit
+* **OrquestaciÃ³n LLM:** LangChain
+* **Modelo Inteligencia Artificial:** Google Gemini
+* **GestiÃ³n de Entorno:** Python-dotenv
+
+---
+
+## âš™ï¸ InstalaciÃ³n
+
+Sigue estos pasos para configurar el proyecto en tu entorno local:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/miramar1974/orquestador-pdf
+   ```
+
+2. **Ingresar al directorio del proyecto:**
+   ```bash
+   cd orquestador-pdf
+   ```
+
+3. **Crear un entorno virtual:**
+   ```bash
+   python -m venv .venv
+   ```
+
+4. **Activar el entorno virtual:**
+   * en Windows:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   * En Linux/macOS:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+5. **Instalar las dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. **Configurar las variables de entorno:**
+   Crea un archivo llamado `.env` en la raÃ­z del proyecto y agrega tu clave de API de Gemini:
+   ```env
+   GEMINI_API_KEY=tu_clave_api_key_aquÃ­
+   ```
+
+---
+
+## ğŸš€ EjecuciÃ³n
+
+Una vez instaladas las dependencias y configurada tu API Key, inicializa la aplicaciÃ³n con el siguiente comando:
+
+```bash
+streamlit run app_web.py
+```
+
+Inmediatamente se abrirÃ¡ tu explorador web con la interfaz grÃ¡fica para comenzar a interactuar.
+
+---
+
+## ğŸ’¡ Ejemplos de Consultas
+
+Puedes probar el sistema realizando preguntas como:
+* Â¿Costo de consultas?
+* Â¿Reembolsos?
+* Â¿Agendar consultas?
+* Â¿Traslados en ambulancia?
+* Â¿PolÃ­tica de privacidad del paciente?
+* Â¿Entrega de resultados?
+* Â¿PolÃ­tica de cancelaciones?
+* Â¿Devoluciones?
+* Â¿GuÃ­a de convenios?
+* Â¿Sedes alternas?
+* Â¿Costo de imagenologÃ­a avanzada?
+* Â¿FacturaciÃ³n electrÃ³nica?
+* Â¿PolÃ­tica de descuentos?
+* Â¿GuÃ­a de admisiÃ³n?
+* Â¿Protocolos de alta mÃ©dica?
+
+---
+
+## ğŸ“¸ Capturas de Pantalla
+
+*(Coloca aquÃ­ las imÃ¡genes de tu aplicaciÃ³n si lo deseas)*
+<!-- Ejemplo: ![Dashboard](ruta/a/tu/imagen.png) -->
+
+---
+
+## âœ’ï¸ Autor
+
+* **Miguel Ibarra Miramar** - [GitHub](https://github.com/miramar1974)
