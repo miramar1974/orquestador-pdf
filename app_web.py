@@ -187,3 +187,4 @@ if pregunta := st.chat_input("Escribe tu pregunta aquí y presiona Enter..."):
             except Exception as e:
                 st.error(f"Tuvimos un problema al conectar con el sistea de atencion: {e}")
                                             
+                                            
