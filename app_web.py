@@ -13,12 +13,22 @@ from langchain_core.messages import HumanMessage, AIMessage #<-- Vamos a manejar
 from my_models import GEMINI_FLASH
 # from detalles_image import DetallesImagen <-- esto era para analizar la imagen
 
-# CARGAR LAS VARIABLES DEL ARCHIVO .ENV 
+# CARGAR LAS VARIABLES DEL ARCHIVO .ENV SOLO PARA EL DESARROLLO LOCAL
 load_dotenv()
 
-#LEER LA API KEY DESDE EL ENTORNO
-gcp_api_key = os.getenv("GCP_API_KEY")
+#LEER LA API KEY DESDE EL ENTORNO (COMPATIBLE CON LOCAL Y STREMLIT CLOUD)
+if "GCP_API_KEY" in st.secrets:
+    gcp_api_key = st.secrets["GCP_API_KEY"]
+else:
+    gcp_api_key = os.getenv("GCP_API_KEY")
+    
+# VALIDAR QUE LA API KEY NO ESTE VACIA ANTES DE QUE LANGCHAIN FALLE
 
+if not gcp_api_key:
+    st.error("Error: No se encontro la API key ´GCP_API_KEY´.")
+    st.info("Asegurate de configurarla en los Secrets de Streamlit Cloud o en tu archvio .env local")
+    st.stop()
+    
 # CONFIGURACION DE LA INTERFAZ STREAMLIT
 st.set_page_config(
     page_title="Asistente Virtual  -  SaludPlus",
