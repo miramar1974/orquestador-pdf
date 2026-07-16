@@ -1,6 +1,6 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
-import streamlit as st  
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser # <-- Quitamos la parte de JsonOutputParser para simplificar la salida
@@ -14,7 +14,7 @@ from my_models import GEMINI_FLASH
 # from detalles_image import DetallesImagen <-- esto era para analizar la imagen
 
 # CARGAR LAS VARIABLES DEL ARCHIVO .ENV SOLO PARA EL DESARROLLO LOCAL
-load_dotenv()
+load_dotenv(override=True)
 
 #LEER LA API KEY DESDE EL ENTORNO (COMPATIBLE CON LOCAL Y STREMLIT CLOUD)
 if "GCP_API_KEY" in st.secrets:
@@ -24,7 +24,9 @@ else:
     
 # VALIDAR QUE LA API KEY NO ESTE VACIA ANTES DE QUE LANGCHAIN FALLE
 
-if not gcp_api_key:
+if gcp_api_key:
+    os.environ["GOOGLE_API_KEY"] = gcp_api_key
+else:
     st.error("Error: No se encontro la API key ´GCP_API_KEY´.")
     st.info("Asegurate de configurarla en los Secrets de Streamlit Cloud o en tu archvio .env local")
     st.stop()
